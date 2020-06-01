@@ -1,3 +1,7 @@
 # libpythonpro
 Modulo para exemplificação do projeto no curso pytools
-Melhoria de treinamento
+Melhoriat de treinamento
+Nesse curso é ensinado como contruir com projeto de código aberto
+Suportada versão 3 Python
+
+[![Build Status](https://travis-ci.org/Marco1357/blackpython.svg?branch=master)](https://travis-ci.org/Marco1357/blackpython)
