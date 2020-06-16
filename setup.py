@@ -1,134 +1,134 @@
- codecs de importação
-importação  os
- sys de importação
+import codecs
+import os
+import sys
 
-de  distutils . util  importação  convert_path
-de  fnmatch  import  fnmatchcase
-de  setuptools  import  setup , find_packages
-
-
-def  lido ( fname ):
-     codecs de retorno . aberto ( os . path . join ( os . path . dirname ( __file__ ), fname )). read ()
+from distutils.util import convert_path
+from fnmatch import fnmatchcase
+from setuptools import setup, find_packages
 
 
-# Fornecido como um atributo, para que você possa anexá-los
-# de replicá-los:
-standard_exclude  = [ "* .py" , "* .pyc" , "* $ py.class" , "* ~" , ". *" , "* .bak" ]
-standard_exclude_directories  = [
-    ". *" , "CVS" , "_darcs" , "./build" , "./dist" , "EGG-INFO" , "* .egg-info"
-]
+def read(fname):
+    return codecs.open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
-(c) 2005 Ian Bicking e colaboradores; escrito para colar (http://pythonpaste.org)
-# Licenciado sob a licença MIT: http://www.opensource.org/licenses/mit-license.php
-# Nota: você pode copiar isso para o arquivo setup.py literalmente, como
-# você não pode importar isso de outro pacote, quando não sabe se
-# esse pacote já está instalado.
-def  find_package_data (
-    onde = "." ,
-    package = "" ,
-    exclude = standard_exclude ,
-    exclude_directories = standard_exclude_directories ,
-    only_in_packages = True ,
-    show_ignored = False ):
-    "" "
-    Retorne um dicionário adequado para uso em `` package_data``
-    em um arquivo distutils `` setup.py``.
-    O dicionário se parece com:
-        {"pacote": [arquivos]}
-    Onde `` files`` é uma lista de todos os arquivos nesse pacote que
-    não corresponde a nada em `` excluir``.
-    Se `` only_in_packages`` for verdadeiro, os diretórios de nível superior que
-    pacotes não serão incluídos (mas diretórios sob pacotes
-    vai).
-    Diretórios que correspondem a qualquer padrão em `` exclude_directories``
-    ser ignorado; por diretórios padrão com os principais `` .``, `` CVS``,
-    e `` _darcs`` serão ignorados.
-    Se `` show_ignored`` for verdadeiro, todos os arquivos que não estão "t
-    incluídos nos dados do pacote são mostrados no stderr (para depuração
-    finalidades).
-    Os padrões de anotações usam curingas ou podem ser caminhos exatos (incluindo
-    levando ``. / ``), e toda a pesquisa não diferencia maiúsculas de minúsculas.
-    "" "
-    out  = {}
-    pilha  = [( caminho_convertido ( onde ), "" , pacote , somente_em_pacotes )]
-    while  stack :
-        onde , prefixo , pacote , only_in_packages  =  pilha . pop ( 0 )
-        para o  nome  em  os . listdir ( onde ):
-            fn  =  os . caminho . junção ( onde , nome )
-            se  os . caminho . isdir ( fn ):
-                bad_name  =  False
-                para  padrão  em  exclude_directories :
-                    if ( fnmatchcase ( nome , padrão )
-                        ou  fn . padrão inferior () ==  . inferior ()):
-                        bad_name  =  True
-                        se  show_ignored :
-                            print  >>  sys . stderr , (
-                                "Diretório% s ignorado pelo padrão% s"
-                                % ( fn , padrão ))
-                        quebrar
-                se  bad_name :
-                    continuar
-                if ( os . path . isfile ( os . path . join ( fn , "__init__.py" ))
-                    e  não  prefixo ):
-                    se  não  for o pacote :
-                        new_package  =  name
-                    mais :
-                        new_package  =  pacote  +  "."  +  nome
-                    pilha . acrescentar (( fn , "" , new_package , False ))
-                mais :
-                    pilha . acrescentar (( fn , prefixo  +  nome  +  "/" , pacote , apenas em pacotes )))
-             pacote  elif ou  não  only_in_packages :
-                # é um arquivo
-                bad_name  =  False
-                para  padrão  em  excluir :
-                    if ( fnmatchcase ( nome , padrão )
-                        ou  fn . padrão inferior () ==  . inferior ()):
-                        bad_name  =  True
-                        se  show_ignored :
-                            print  >>  sys . stderr , (
-                                "Arquivo% s ignorado pelo padrão% s"
-                                % ( fn , padrão ))
-                        quebrar
-                se  bad_name :
-                    continuar
-                fora . setdefault ( pacote , []). acrescentar ( prefixo + nome )
-    voltar  para fora
+# Provided as an attribute, so you can append to these instead
+# of replicating them:
+standard_exclude = ["*.py", "*.pyc", "*$py.class", "*~", ".*", "*.bak"]
+standard_exclude_directories = [
+    ".*", "CVS", "_darcs", "./build", "./dist", "EGG-INFO", "*.egg-info"]
 
 
-PACOTE  =  "blackpython"
-NAME  =  "PACOTE"
-DESCRIPTION  =  "Módulo de exemplo de projeto no curso pytools"
-AUTOR  =  "Renzo Nuccitelli"
-AUTHOR_EMAIL  =  "miranda_garcya@hotmail.com"
-URL  =  "https://github.com/Marco1357/blackpython"
-VERSÃO  =  __import__ ( PACOTE ). __versão__
+
+# (c) 2005 Ian Bicking and contributors; written for Paste (http://pythonpaste.org)
+# Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+# Note: you may want to copy this into your setup.py file verbatim, as
+# you can't import this from another package, when you don't know if
+# that package is installed yet.
+def find_package_data(
+    where=".",
+    package="",
+    exclude=standard_exclude,
+    exclude_directories=standard_exclude_directories,
+    only_in_packages=True,
+    show_ignored=False):
+    """
+    Return a dictionary suitable for use in ``package_data``
+    in a distutils ``setup.py`` file.
+    The dictionary looks like::
+        {"package": [files]}
+    Where ``files`` is a list of all the files in that package that
+    don"t match anything in ``exclude``.
+    If ``only_in_packages`` is true, then top-level directories that
+    are not packages won"t be included (but directories under packages
+    will).
+    Directories matching any pattern in ``exclude_directories`` will
+    be ignored; by default directories with leading ``.``, ``CVS``,
+    and ``_darcs`` will be ignored.
+    If ``show_ignored`` is true, then all the files that aren"t
+    included in package data are shown on stderr (for debugging
+    purposes).
+    Note patterns use wildcards, or can be exact paths (including
+    leading ``./``), and all searching is case-insensitive.
+    """
+    out = {}
+    stack = [(convert_path(where), "", package, only_in_packages)]
+    while stack:
+        where, prefix, package, only_in_packages = stack.pop(0)
+        for name in os.listdir(where):
+            fn = os.path.join(where, name)
+            if os.path.isdir(fn):
+                bad_name = False
+                for pattern in exclude_directories:
+                    if (fnmatchcase(name, pattern)
+                        or fn.lower() == pattern.lower()):
+                        bad_name = True
+                        if show_ignored:
+                            print >> sys.stderr, (
+                                "Directory %s ignored by pattern %s"
+                                % (fn, pattern))
+                        break
+                if bad_name:
+                    continue
+                if (os.path.isfile(os.path.join(fn, "__init__.py"))
+                    and not prefix):
+                    if not package:
+                        new_package = name
+                    else:
+                        new_package = package + "." + name
+                    stack.append((fn, "", new_package, False))
+                else:
+                    stack.append((fn, prefix + name + "/", package, only_in_packages))
+            elif package or not only_in_packages:
+                # is a file
+                bad_name = False
+                for pattern in exclude:
+                    if (fnmatchcase(name, pattern)
+                        or fn.lower() == pattern.lower()):
+                        bad_name = True
+                        if show_ignored:
+                            print >> sys.stderr, (
+                                "File %s ignored by pattern %s"
+                                % (fn, pattern))
+                        break
+                if bad_name:
+                    continue
+                out.setdefault(package, []).append(prefix+name)
+    return out
 
 
-configuração (
-    name = NAME ,
-    version = VERSION ,
-    description = DESCRIÇÃO ,
-    long_description = read('README.md') ,
-    long_description_content_type='text/markdow',
-    author = AUTHOR ,
-    author_email = AUTHOR_EMAIL ,
-    licença = ('LICENSE') ,
-    url = URL ,
-    packages = find_packages ( exclude = [ "testes. *" , "testes" ]),
-    package_data = find_package_data ( PACKAGE , only_in_packages = False ),
-    classificadores = [
-        "Status do desenvolvimento :: 5 - Produção / Pre-Alpha" ,
-        "Ambiente :: Console" ,
-        "Público-alvo: desenvolvedores" ,
-        "Licença :: OSI Aprovado :: Licença Pública Geral Menor GNU v3 ou posterior (LGPLv3 +)" ,
-        "Sistema operacional :: Independente do SO" ,
-        "Linguagem de programação :: Python" ,
-        "Linguagem de programação :: Python :: 3,7",
-        "Framework :: Paste" ,
+PACKAGE = "blackpythonpro"
+NAME = PACKAGE
+DESCRIPTION = "Módulo para exemplificar construção de projetos Python no curso Pytools"
+AUTHOR = "Marco A.Garcia"
+AUTHOR_EMAIL = "miranda_garcya@hotmail.com"
+URL = "https://github.com/Marco1357/blackpython"
+VERSION = __import__(PACKAGE).__version__
+
+
+setup(
+    name=NAME,
+    version=VERSION,
+    description=DESCRIPTION,
+    long_description=read('README.md'),
+    long_description_content_type='text/markdown',
+    author=AUTHOR,
+    author_email=AUTHOR_EMAIL,
+    license=read('LICENSE'),
+    url=URL,
+    packages=find_packages(exclude=["tests.*", "tests"]),
+    package_data=find_package_data(PACKAGE, only_in_packages=False),
+    classifiers=[
+        "Development Status :: 2 - Pre-Alpha",
+        "Environment :: Console",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+) ",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Programming Language :: Python3.8",
+        "Framework :: Pytest",
     ],
-    install_requists=[
-      'requests'
-    ]
-    zip_safe = False ,
+    install_requires=[
+        'requests'
+    ],
+    zip_safe=False,
 )
